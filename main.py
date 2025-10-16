@@ -30,7 +30,7 @@ def list_items(limit: int = 10):
     return items[0:limit]
 
 
-@app.get("/items/{item_id}")
+@app.get("/items/{item_id}", response_model=Item)
 def get_item(item_id: int) -> Item:
     if item_id < len(items):
         return items[item_id]
@@ -39,3 +39,7 @@ def get_item(item_id: int) -> Item:
             status_code=404,
             detail=f"Item {item_id} not found",
         )
+
+#  http://127.0.0.1:8000/docs#/
+#  http://127.0.0.1:8000/redocs
+#  comment above really important
