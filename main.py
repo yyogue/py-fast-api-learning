@@ -1,8 +1,15 @@
 from fastapi import FastAPI, HTTPException  # type: ignore
+from pydantic import BaseModel  # type: ignore
 
 # command line to run uvicorn uvicorn main:app --reload
-
 app = FastAPI()
+
+
+class Item(BaseModel):
+    text: str = None
+    # if removed the str = None, it will make it a required
+    is_done: bool = False
+
 
 items = []
 
@@ -13,7 +20,7 @@ def root():
 
 
 @app.post("/items")
-def create_item(item: str):
+def create_item(item: Item):
     items.append(item)
     return items
 
@@ -24,7 +31,7 @@ def list_items(limit: int = 10):
 
 
 @app.get("/items/{item_id}")
-def get_item(item_id: int) -> str:
+def get_item(item_id: int) -> Item:
     if item_id < len(items):
         return items[item_id]
     else:
